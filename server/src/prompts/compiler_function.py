@@ -1,15 +1,22 @@
-from src.prompts.compiler_constants import def_compiler, def_init, def_function, class_ai, class_import, class_user
+from src.prompts.compiler_constants import (
+    def_compiler,
+    def_init,
+    def_function,
+    class_ai,
+    class_import,
+    class_user,
+)
 
-def nlp_full(code: str, function = False, useClasses = False) -> str:
+
+def nlp_full(code: str, function=False, useClasses=False) -> str:
     defination = def_compiler
-    if (function):
+    if function:
         defination += def_function
     prefix = class_import
-    if (useClasses):
+    if useClasses:
         prefix += class_ai
         prefix += class_user
-    return """
-{defination}
+    return """{defination}
 <MIXCODE>
 ```
 {prefix}
@@ -17,4 +24,6 @@ def nlp_full(code: str, function = False, useClasses = False) -> str:
 ```
 </MIXCODE>
 {init}
-""".format(defination = defination, prefix = prefix, code = code, init=def_init)
+""".format(
+        defination=defination, prefix=prefix, code=code, init=def_init
+    )

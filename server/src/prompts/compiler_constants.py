@@ -1,7 +1,4 @@
-
-
-def_compiler = """
-<::Definition::>
+def_compiler = """<::Definition::>
 <::MixCode::>
 新世界采用一种新定义的MixCode抽象表达一个任务的运行逻辑，MixCode由传统的编程语言+抽象代码+语义描述的方式组成，解决语言描述无法完整直观的描述整个流程逻辑，同时编程语言之间都有共性(流程控制)，因此这种MixCode来借助编程语言符号来辅助我们高效清晰的表达任务流程。
 <::/MixCode::>

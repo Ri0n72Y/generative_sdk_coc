@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from "react";
+import "./App.css";
+import { usePrompt } from "./llm-utils/prompt";
+import { init } from "./llm-utils/llm";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [code, setCode] = useState("");
+  const [answer, setAnswer] = useState("");
+  const quiz = useRef<(prompt: string) => Promise<string>>();
+  const { data: prompt, isLoading, error } = usePrompt(code);
+  useEffect(() => {
+    const i = async () => {
+      const question = await init({});
+      quiz.current = question;
+      console.log("loaded");
+    };
+    i();
+  }, []);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <textarea
+        className="textarea"
+        defaultValue={code}
+        onBlur={(e) => setCode(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          if (!quiz.current) {
+            console.log("not yet loaded");
+            return;
+          }
+          const aw = await quiz.current(prompt);
+          setAnswer(aw);
+        }}
+      >
+        Ask!
+      </button>
+      {isLoading ? (
+        "Loading..."
+      ) : (
+        <div className="outputs">{answer || error}</div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
